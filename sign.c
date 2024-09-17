@@ -898,7 +898,7 @@ do_sign_dyn(samplerZ samp, void *samp_ctx, int16_t *s2,
 	const int8_t *restrict f, const int8_t *restrict g,
 	const int8_t *restrict F, const int8_t *restrict G,
 	const uint16_t *hm, unsigned logn, fpr *restrict tmp,fpr *c_read,fpr *f_read,fpr *t_read)
-{
+{//hm =c 无符号16位整数；f =f 有符号8位整数-128,127
 	size_t n, u;
 	fpr *t0, *t1, *tx, *ty;
 	fpr *b00, *b01, *b10, *b11, *g00, *g01, *g11;
@@ -907,7 +907,7 @@ do_sign_dyn(samplerZ samp, void *samp_ctx, int16_t *s2,
 	int16_t *s1tmp, *s2tmp;
 
 	n = MKN(logn);
-
+//n=1<<9=512
 	/*
 	 * Lattice basis is B = [[g, -f], [G, -F]]. We convert it to FFT.
 	 */
@@ -985,12 +985,13 @@ do_sign_dyn(samplerZ samp, void *samp_ctx, int16_t *s2,
 		t1[u] = fpr_zero;
 		*/
 	}
-
+// t0 c 512系数转化为浮点数
 	/*
 	 * Apply the lattice basis to obtain the real target
 	 * vector (after normalization with regards to modulus).
 	 */
 	Zf(FFT)(t0, logn);
+//t0 FFT
 	ni = fpr_inverse_of_q;
 	memcpy(t1, t0, n * sizeof *t0);
 
